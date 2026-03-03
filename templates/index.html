@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Student Performance Predictor</h1>
+            </div>
+            <p class="subtitle">Predict your final grade based on your academic profile</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Input Form Section -->
+            <section class="form-section">
+                <div class="form-container">
+                    <h2><i class="fas fa-file-alt"></i> Enter Student Information</h2>
+                    
+                    <form id="predictionForm" class="prediction-form">
+                        <!-- Study Time -->
+                        <div class="form-group">
+                            <label for="studytime">
+                                <i class="fas fa-book"></i> Study Time per Week
+                                <span class="required">*</span>
+                            </label>
+                            <select id="studytime" name="studytime" required>
+                                <option value="">Select study time</option>
+                                <option value="1">Less than 2 hours</option>
+                                <option value="2">2 to 5 hours</option>
+                                <option value="3">5 to 10 hours</option>
+                                <option value="4">More than 10 hours</option>
+                            </select>
+                        </div>
+
+                        <!-- Absences -->
+                        <div class="form-group">
+                            <label for="absences">
+                                <i class="fas fa-calendar-times"></i> Number of Absences
+                                <span class="required">*</span>
+                            </label>
+                            <input type="number" id="absences" name="absences" min="0" max="93" placeholder="0-93" required>
+                            <small>Total school absences (0-93)</small>
+                        </div>
+
+                        <!-- First Period Grade -->
+                        <div class="form-group">
+                            <label for="G1">
+                                <i class="fas fa-star"></i> First Period Grade (G1)
+                                <span class="required">*</span>
+                            </label>
+                            <input type="number" id="G1" name="G1" min="0" max="20" step="0.1" placeholder="0-20" required>
+                            <small>Grade out of 20</small>
+                        </div>
+
+                        <!-- Second Period Grade -->
+                        <div class="form-group">
+                            <label for="G2">
+                                <i class="fas fa-star"></i> Second Period Grade (G2)
+                                <span class="required">*</span>
+                            </label>
+                            <input type="number" id="G2" name="G2" min="0" max="20" step="0.1" placeholder="0-20" required>
+                            <small>Grade out of 20</small>
+                        </div>
+
+                        <!-- Mother's Education -->
+                        <div class="form-group">
+                            <label for="Medu">
+                                <i class="fas fa-user-circle"></i> Mother's Education Level
+                                <span class="required">*</span>
+                            </label>
+                            <select id="Medu" name="Medu" required>
+                                <option value="">Select education level</option>
+                                <option value="0">None</option>
+                                <option value="1">Primary (4th grade)</option>
+                                <option value="2">5th to 9th grade</option>
+                                <option value="3">Secondary education</option>
+                                <option value="4">Higher education</option>
+                            </select>
+                        </div>
+
+                        <!-- Father's Education -->
+                        <div class="form-group">
+                            <label for="Fedu">
+                                <i class="fas fa-user-circle"></i> Father's Education Level
+                                <span class="required">*</span>
+                            </label>
+                            <select id="Fedu" name="Fedu" required>
+                                <option value="">Select education level</option>
+                                <option value="0">None</option>
+                                <option value="1">Primary (4th grade)</option>
+                                <option value="2">5th to 9th grade</option>
+                                <option value="3">Secondary education</option>
+                                <option value="4">Higher education</option>
+                            </select>
+                        </div>
+
+                        <!-- Past Failures -->
+                        <div class="form-group">
+                            <label for="failures">
+                                <i class="fas fa-times-circle"></i> Past Class Failures
+                                <span class="required">*</span>
+                            </label>
+                            <select id="failures" name="failures" required>
+                                <option value="">Select number of failures</option>
+                                <option value="0">None</option>
+                                <option value="1">1 failure</option>
+                                <option value="2">2 failures</option>
+                                <option value="3">3 failures</option>
+                                <option value="4">4 or more failures</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-predict">
+                            <i class="fas fa-magic"></i> Predict Grade
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <h2><i class="fas fa-chart-bar"></i> Prediction Results</h2>
+                    
+                    <!-- Prediction Card -->
+                    <div class="prediction-card" id="predictionCard">
+                        <div class="prediction-main">
+                            <div class="grade-circle" id="gradeCircle">
+                                <span class="grade-value" id="gradeValue">--</span>
+                                <span class="grade-label">/20</span>
+                            </div>
+                            <div class="prediction-details">
+                                <h3 id="performanceText">--</h3>
+                                <p id="riskText">--</p>
+                                <div class="confidence-interval">
+                                    <i class="fas fa-shield-alt"></i>
+                                    95% Confidence: <span id="confidenceRange">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendation Card -->
+                    <div class="recommendation-card" id="recommendationCard">
+                        <h3><i class="fas fa-lightbulb"></i> Recommendation</h3>
+                        <p id="recommendationText">--</p>
+                    </div>
+
+                    <!-- Insights Card -->
+                    <div class="insights-card">
+                        <h3><i class="fas fa-brain"></i> Key Insights</h3>
+                        <ul class="insights-list" id="insightsList">
+                            <li>--</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-redo"></i> Make Another Prediction
+                        </button>
+                    </div>
+
+                    <div class="timestamp">
+                        <small>Prediction generated at <span id="timestamp">--</span></small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Section -->
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-container">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Error</h3>
+                    <p id="errorMessage">An error occurred. Please try again.</p>
+                    <button class="btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Go Back
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p><i class="fas fa-info-circle"></i> Student Performance Prediction System (End-to-End ML Deployment)</p>
+            <p>Model: Linear Regression | R²: 86.09% | Version 1.0</p>
+        </footer>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('predictionForm');
+        const resultsSection = document.getElementById('resultsSection');
+        const errorSection = document.getElementById('errorSection');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'flex';
+            resultsSection.style.display = 'none';
+            errorSection.style.display = 'none';
+
+            // Collect form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            try {
+                // Send prediction request
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                loadingSpinner.style.display = 'none';
+
+                if (result.success) {
+                    displayResults(result);
+                } else {
+                    displayError(result.error);
+                }
+            } catch (error) {
+                loadingSpinner.style.display = 'none';
+                displayError('Network error. Please try again.');
+                console.error('Error:', error);
+            }
+        });
+
+        function displayResults(result) {
+            // Update prediction
+            document.getElementById('gradeValue').textContent = result.prediction;
+            document.getElementById('performanceText').textContent = result.performance;
+            document.getElementById('riskText').textContent = `Risk Level: ${result.risk_level}`;
+            document.getElementById('confidenceRange').textContent = 
+                `[${result.confidence_lower}, ${result.confidence_upper}]`;
+            
+            // Update recommendation
+            document.getElementById('recommendationText').textContent = result.recommendation;
+            
+            // Update insights
+            const insightsList = document.getElementById('insightsList');
+            insightsList.innerHTML = result.insights
+                .map(insight => `<li>${insight}</li>`)
+                .join('');
+            
+            // Update timestamp
+            document.getElementById('timestamp').textContent = result.timestamp;
+            
+            // Update color based on performance
+            const gradeCircle = document.getElementById('gradeCircle');
+            gradeCircle.style.borderColor = result.color;
+            const predictionMain = document.querySelector('.prediction-main');
+            predictionMain.style.borderLeftColor = result.color;
+            
+            // Update recommendation card color
+            const recommendationCard = document.getElementById('recommendationCard');
+            recommendationCard.style.borderLeftColor = result.color;
+            
+            resultsSection.style.display = 'block';
+            errorSection.style.display = 'none';
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            errorSection.style.display = 'block';
+            resultsSection.style.display = 'none';
+            errorSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            form.reset();
+            resultsSection.style.display = 'none';
+            errorSection.style.display = 'none';
+            form.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
