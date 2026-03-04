@@ -64,6 +64,11 @@ python app.py
 - `scaler.pkl` - Feature preprocessing
 - `student-por.csv` - Dataset (649 records)
 
+
+## Output
+<img width="1898" height="918" alt="Screenshot 2026-03-03 191125" src="https://github.com/user-attachments/assets/71429d58-497b-4062-b6c1-c8a814fe1a27" />
+
 ---
 
 **Version**: 1.0.0 | **Status**: Production Ready ✅
+
