@@ -161,10 +161,5 @@ docker rmi student-performance-predictor
 | `student-por.csv` | Dataset |
 
 ---
-
-## 🚀 Future Improvements
-
-- 📊 Add interactive charts (Chart.js / D3.js)
-- 🔍 Advanced filtering & feature importance insights
-- ☁️ Deploy on AWS / Render / Railway
-- 🔐 Add user authentication system
+## Output
+<img width="1898" height="918" alt="Screenshot 2026-03-03 191125" src="https://github.com/user-attachments/assets/71429d58-497b-4062-b6c1-c8a814fe1a27" />
